@@ -29,15 +29,24 @@ app.use(express.static(__dirname + '/public'));
 // Setting up the Passport Strategies
 require("./config/passport")(passport)
 
-// Add code here:
+
 app.get('/', function(req, res){
   res.render('layout', {user: req.user});
 });
 
+// FACEBOOK
 app.get('/auth/facebook', passport.authenticate('facebook', { scope: 'email'} ));
-
 app.get('/auth/facebook/callback',
   passport.authenticate('facebook', {
+    successRedirect: '/',
+    failureRedirect: '/'
+  })
+);
+
+// TWITTER
+app.get('/auth/twitter', passport.authenticate('twitter', { scope: 'email'} ));
+app.get('/auth/twitter/callback',
+  passport.authenticate('twitter', {
     successRedirect: '/',
     failureRedirect: '/'
   })
