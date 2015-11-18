@@ -7,5 +7,10 @@ module.exports = mongoose.model('User',{
     firstName: String,
     lastName: String,
     email: String
+  },
+  tw: {
+    id: String,
+    access_token: String,
+
   }
 });

@@ -16,5 +16,31 @@
       <a href="/auth/facebook">Login with Facebook</a>
     <% } %>
   </div>
+
+   <h1>TWITTER LOGIN USING PASSPORT</h1>
+  <div>
+    <% if(user != undefined){ %>
+      <h2>Below is the data sent by twitter</h2>
+      <pre>
+        <%= user.tw %>
+      </pre>
+      <a href="/logout">Logout</a>
+    <% } else { %>
+      <a href="/auth/twitter">Login with Twitter</a>
+    <% } %>
+  </div>
+
+     <h1>GOOGLE LOGIN USING PASSPORT</h1>
+  <div>
+    <% if(user != undefined){ %>
+      <h2>Below is the data sent by twitter</h2>
+      <pre>
+        <%= user.tw %>
+      </pre>
+      <a href="/logout">Logout</a>
+    <% } else { %>
+      <a href="/auth/google">Login with Google</a>
+    <% } %>
+  </div>
 </body>
 </html>
