@@ -52,8 +52,17 @@ app.get('/auth/twitter/callback',
   })
 );
 
+// GOOGLE
+app.get('/auth/google',passport.authenticate('google', { scope: 'email' } ));
+app.get('/auth/google/callback',
+  passport.authenticate('google', {
+    successRedirect: '/',
+    failureRedirect: '/'
+  })
+);
+
 app.get("/logout", function(req, res){
-  req.logout();
+  req.logout()
   res.redirect("/")
 })
 

@@ -29,5 +29,18 @@
       <a href="/auth/twitter">Login with TWITTER</a>
     <% } %>
   </div>
+
+    <h1>GOOGLE LOGIN USING PASSPORT</h1>
+  <div>
+    <% if(user != undefined){ %>
+      <h2>Below is the data sent by GOOGLE</h2>
+      <pre>
+        <%= user.gg %>
+      </pre>
+      <a href="/logout">Logout</a>
+    <% } else { %>
+      <a href="/auth/google">Login with GOOGLE</a>
+    <% } %>
+  </div>
 </body>
 </html>
