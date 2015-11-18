@@ -27,8 +27,24 @@ app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/public'));
 
 // Setting up the Passport Strategies
-require("./config/passport")(passport)
+require("./config/passport")(passport);
 
 // Add code here:
+app.get('/', function(req, res){
+  res.render('layout', {user: req.user});
+});
 
+app.get('/auth/facebook', passport.authenticate('facebook', { scope: 'email'} ));
+
+app.get('/auth/facebook/callback',
+  passport.authenticate('facebook', {
+    successRedirect: '/',
+    failureRedirect: '/'
+  })
+);
+
+app.get("/logout", function(req, res){
+  req.logout();
+  res.redirect("/")
+})
 app.listen(3000);
