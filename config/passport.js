@@ -1,5 +1,6 @@
-var User = require('../models/user');
-var FacebookStrategy = require('passport-facebook').Strategy;
+var User              = require('../models/user');
+// var FacebookStrategy  = require('passport-facebook').Strategy;
+var GoogleStrategy    = require('passport-google-oauth').OAuth2Strategy;
 
 module.exports = function(passport){
   passport.serializeUser(function(user, done) {
@@ -13,31 +14,26 @@ module.exports = function(passport){
     });
   });
 
-  passport.use('facebook', new FacebookStrategy({
-    clientID        : process.env.FACEBOOK_API_KEY,
-    clientSecret    : process.env.FACEBOOK_API_SECRET,
-    callbackURL     : 'http://localhost:3000/auth/facebook/callback',
-    enableProof     : true,
-    profileFields   : ['name', 'emails']
-  }, function(access_token, refresh_token, profile, done) {
-
-    // // Use this to see the information returned from Facebook
-    // console.log(profile)
-
+  passport.use(new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: "http://127.0.0.1:3000/auth/google/callback"
+  },
+  function(accessToken, refreshToken, profile, done) {
+    // asynchronous verification, for effect...
     process.nextTick(function() {
 
-      User.findOne({ 'fb.id' : profile.id }, function(err, user) {
+      User.findOne({ 'google.id' : profile.id }, function(err, user) {
         if (err) return done(err);
         if (user) {
           return done(null, user);
         } else {
 
           var newUser = new User();
-          newUser.fb.id           = profile.id;
-          newUser.fb.access_token = access_token;
-          newUser.fb.firstName    = profile.name.givenName;
-          newUser.fb.lastName     = profile.name.familyName;
-          newUser.fb.email        = profile.emails[0].value;
+          newUser.google.id           = profile.id;
+          newUser.google.access_token = access_token;
+          newUser.google.name         = profile.name.givenName;
+          newUser.google.email        = profile.email;
 
           newUser.save(function(err) {
             if (err)
@@ -46,9 +42,8 @@ module.exports = function(passport){
             return done(null, newUser);
           });
         }
-
       });
     });
-  }));
-
+  }
+  ));
 }
