@@ -14,7 +14,7 @@ var cookieParser   = require("cookie-parser");
 mongoose.connect('mongodb://localhost:27017/facebook-authentication-app');
 
 // Middleware
-app.use( cookieParser() );
+app.use(cookieParser());
 app.use(expressSession({secret: 'mySecretKey'}));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -29,6 +29,23 @@ app.use(express.static(__dirname + '/public'));
 // Setting up the Passport Strategies
 require("./config/passport")(passport)
 
-// Add code here:
+// -> Facebook
+app.get('/auth/facebook', passport.authenticate('facebook', { scope: "email" }));
+
+// <- Facebook
+app.get('/auth/facebook/callback',
+      passport.authenticate('facebook', { successRedirect: '/',
+                                          failureRedirect: '/' }));
+
+// Logout
+app.get("/logout", function(req, res){
+  req.logout();
+  res.redirect("/")
+})
+
+// Home page
+app.get('/', function(req, res){
+  res.render('layout', {user: req.user});
+});
 
 app.listen(3000);
