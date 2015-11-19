@@ -1,5 +1,6 @@
 var User = require('../models/user');
 var FacebookStrategy = require('passport-facebook').Strategy;
+var LinkedInStrategy = require('passport-linkedin').Strategy;
 
 module.exports = function(passport){
   passport.serializeUser(function(user, done) {
@@ -12,6 +13,18 @@ module.exports = function(passport){
       done(err, user);
     });
   });
+
+  passport.use(new LinkedInStrategy({
+    consumerKey: LINKEDIN_API_KEY,
+    consumerSecret: LINKEDIN_SECRET_KEY,
+    callbackURL: "http://localhost:3000/auth/linkedin/callback"
+  },
+  function(token, tokenSecret, profile, done) {
+    User.findOrCreate({ linkedinId: profile.id }, function (err, user) {
+      return done(err, user);
+    });
+  }
+));
 
   passport.use('facebook', new FacebookStrategy({
     clientID        : process.env.FACEBOOK_API_KEY,
@@ -52,3 +65,6 @@ module.exports = function(passport){
   }));
 
 }
+
+
+

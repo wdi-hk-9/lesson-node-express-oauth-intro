@@ -48,4 +48,14 @@ app.get("/logout", function(req, res){
   res.redirect("/")
 })
 
+app.get('/auth/linkedin',
+  passport.authenticate('linkedin'));
+
+app.get('/auth/linkedin/callback',
+  passport.authenticate('linkedin', { failureRedirect: '/login' }),
+  function(req, res) {
+    // Successful authentication, redirect home.
+    res.redirect('/');
+  });
+
 app.listen(3000);
