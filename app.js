@@ -42,10 +42,6 @@ app.get('/auth/facebook/callback',
   })
 );
 
-app.get("/logout", function(req, res){
-  req.logout();
-  res.redirect("/")
-})
 
 app.get('/auth/twitter', passport.authenticate('twitter' ));
 app.get('/auth/twitter/callback',
@@ -55,28 +51,18 @@ app.get('/auth/twitter/callback',
   })
 );
 
-app.get('/auth/google',
-  passport.authenticate('google'),
-  function(req, res){
-    // The request will be redirected to Google for authentication, so
-    // this function will not be called.
-  });
-
+//GOOGLE
+app.get('/auth/google', passport.authenticate('google', {scope: 'email'} )),
 app.get('/auth/google/callback',
-  passport.authenticate('google', { failureRedirect: '/login' }),
-  function(req, res) {
-    // Successful authentication, redirect home.
-    res.redirect('/');
-  });
+  passport.authenticate('google', {
+    successRedirect: '/',
+    failureRedirect: '/'
+  })
+);
 
-app.get('/auth/google',
-  passport.authenticate('google', { scope: 'https://www.google.com/m8/feeds' }));
-
-app.get('/auth/google/callback',
-  passport.authenticate('google', { failureRedirect: '/login' }),
-  function(req, res) {
-    // Successful authentication, redirect home.
-    res.redirect('/');
-  });
+app.get("/logout", function(req, res){
+  req.logout();
+  res.redirect("/")
+})
 
 app.listen(3000);

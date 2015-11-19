@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 
 module.exports = mongoose.model('User',{
+  // details from fb acct
   fb: {
     id: String,
     access_token: String,
@@ -10,7 +11,10 @@ module.exports = mongoose.model('User',{
   },
   tw: {
     id: String,
-    access_token: String,
-
+    access_token: String
+  },
+  gg: {
+    id: String,
+    access_token: String
   }
 });
