@@ -1,7 +1,7 @@
 var User = require('../models/user');
 var FacebookStrategy = require('passport-facebook').Strategy;
 var TwitterStrategy = require('passport-twitter').Strategy;
-var GoogleStrategy = require('passport-google-oauth').OAuthStrategy;
+var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 
 
@@ -18,9 +18,9 @@ module.exports = function(passport){
   });
 
   passport.use('google', new GoogleStrategy({
-    consumerKey   : process.env.GOOGLE_API_KEY,
-    consumerSecret: process.env.GOOGLE_API_SECRET,
-    callbackURL   : "http://127.0.0.1:3000/auth/google/callbacK"
+    clientID      : process.env.GOOGLE_API_KEY,
+    clientSecret  : process.env.GOOGLE_API_SECRET,
+    callbackURL   : "http://localhost:3000/auth/google/callbacK"
   },function(token, tokenSecret, profile, done) {
 
     process.nextTick(function() {
@@ -34,7 +34,7 @@ module.exports = function(passport){
           var newUser             = new User();
           newUser.gg.id           = profile.id;
           newUser.gg.access_token = token;
-          newUser.gg.firstName    = profile.name.displayName;
+          newUser.gg.firstName    = profile.displayName;
           newUser.gg.email        = profile.email;
 
           newUser.save(function(err) {
@@ -51,7 +51,7 @@ module.exports = function(passport){
   passport.use('twitter', new TwitterStrategy({
     consumerKey   : process.env.TWITTER_API_KEY,
     consumerSecret: process.env.TWITTER_API_SECRET,
-    callbackURL   : "http://127.0.0.1:3000/twitter/callback"
+    callbackURL   : "http://localhost:3000/auth/twitter/callback"
   },function(token, tokenSecret, profile, done) {
 
     process.nextTick(function() {
@@ -64,9 +64,6 @@ module.exports = function(passport){
 
           var newUser             = new User();
           newUser.tw.id           = profile.id;
-          newUser.tw.access_token = token;
-          newUser.tw.firstName    = profile.name.displayName;
-          newUser.tw.email        = profile.email;
 
           newUser.save(function(err) {
             if (err)

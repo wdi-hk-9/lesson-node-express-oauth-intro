@@ -11,16 +11,10 @@ module.exports = mongoose.model('User',{
   },
   tw: {
     id: String,
-    access_token: String,
-    firstName: String,
-    lastName: String,
-    email: String
+    access_token: String
   },
   gg: {
     id: String,
-    access_token: String,
-    firstName: String,
-    lastName: String,
-    email: String
+    access_token: String
   }
 });
